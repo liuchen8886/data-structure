@@ -11,6 +11,7 @@ public class EightQueenTest {
 
     /**
      * 课程版本
+     *
      * 自实现版本
      * @see BackTrackTest#eightQueenCount()
      */

@@ -158,7 +158,7 @@ class DynamicProgramming {
 
     }
 
-    private int min(int a, int b, int c) {
+    public static int min(int a, int b, int c) {
         return Math.min(Math.min(a, b), c);
     }
 
