@@ -1646,4 +1646,24 @@ public class LeetCodeTest {
         }
     }
 
+    /**
+     * #2575
+     */
+    @Test
+    void testDivisibilityArray() {
+        int[] ans = divisibilityArray("91221181269244172125025075166510211202115152121212341281327", 21);
+        System.out.println(ans.length);
+    }
+    private int[] divisibilityArray(String word, int m) {
+        int[] res = new int[word.length()];
+        long cur = 0;
+        for (int i = 0; i < word.length(); i++) {
+            char c = word.charAt(i);
+            cur = (cur * 10 + (c - '0')) % m;
+            res[i] = (cur == 0) ? 1 : 0;
+        }
+
+        return res;
+    }
+
 }
