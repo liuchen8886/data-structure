@@ -1666,4 +1666,89 @@ public class LeetCodeTest {
         return res;
     }
 
+    /**
+     * #2129 将标题单词的首字母大写
+     */
+    @Test
+    void testCapitalizeTitle() {
+        String result = capitalizeTitle("L hV");
+        System.out.println(result);
+    }
+
+    public String capitalizeTitle(String title) {
+        int start = 0, end = 0;
+        int gap = 'a' - 'A';
+        char[] chars = title.toCharArray();
+        for (; start < title.length(); end++) {
+            if (end == title.length() || chars[end] == ' ') {
+                if (end - start > 2) {
+                    if (chars[start] >= 'a') {
+                        chars[start] -= gap;
+                    }
+                    start++;
+                }
+                for(; start < end; start++) {
+                    if (chars[start] < 'a') {
+                        chars[start] += gap;
+                    }
+                }
+                start = end+1;
+                end = start;
+            }
+        }
+        return new String(chars);
+    }
+
+    /**
+     * #3020 子集中元素的最大数量
+     */
+    @Test
+    void testMaximumLength() {
+        assertEquals(7, maximumLength(new int[]{48841,358801,28561,18974736,4356,221,358801,599,13,4356,66,48841,28561,815730721,13,815730721,18974736,66,169,599,169,221}));
+    }
+
+    public int maximumLength(int[] nums) {
+        // 1、使用TreeMap统计各数字出现的次数，并利用特性对key从小到大排序
+        TreeMap<Integer, Integer> numCntMap = new TreeMap<>();
+        for (int num : nums) {
+            numCntMap.put(num, numCntMap.getOrDefault(num, 0) + 1);
+        }
+
+        // 2、枚举，同时删除已访问的元素
+        int maxCnt = 1;
+        while (!numCntMap.isEmpty()) {
+            int tmpCnt = 0;
+            Map.Entry<Integer, Integer> firstEntry = numCntMap.firstEntry();
+            int num = firstEntry.getKey();
+            if (num == 1) {
+                // 处理特例1
+                maxCnt = Math.max(maxCnt, firstEntry.getValue() % 2 == 0 ? firstEntry.getValue() - 1 : firstEntry.getValue());
+                numCntMap.pollFirstEntry();
+                continue;
+            }
+            // 以该元素为开始枚举，遵循模式：x, x2, x4 ...
+            while (numCntMap.containsKey(num)) {
+                int numCnt = numCntMap.get(num);
+                numCntMap.remove(num, numCnt);
+                // 判断数字出现的次数
+                if (numCnt == 1) {
+                    // 波峰，结束枚举
+                    tmpCnt++;
+                    break;
+                } else {
+                    // 满足对称分布，继续枚举
+                    tmpCnt += 2;
+                    num *= num;
+                }
+            }
+
+            // 处理最后的峰值，峰值元素只取1个
+            tmpCnt = tmpCnt % 2 == 0 ? tmpCnt - 1 : tmpCnt;
+            // 更新最大子集
+            maxCnt = Math.max(maxCnt, tmpCnt);
+        }
+
+        return maxCnt;
+    }
+
 }
